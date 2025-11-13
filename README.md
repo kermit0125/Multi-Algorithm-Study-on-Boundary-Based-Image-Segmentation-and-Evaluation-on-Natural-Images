@@ -57,53 +57,53 @@ The framework supports parameter tuning, cross-validation, region-based and boun
 ---
 
 ## 🧱 工程结构 | Project Structure
-
 本项目采用模块化结构，确保算法实现、调参、评估与可视化彼此独立：
+
+```text
 Project/
 │
-├── bsds_loader.py
+├── bsds_loader.py              
 │
 ├── algorithms/
-│ ├── seg_otsu.py
-│ ├── seg_kmeans.py
-│ ├── seg_snake.py
-│ ├── seg_morph.py
-│ ├── seg_graph.py
-│ └── init.py
+│   ├── seg_otsu.py             
+│   ├── seg_kmeans.py           
+│   ├── seg_snake.py            
+│   ├── seg_morph.py            
+│   ├── seg_graph.py            
+│   └── __init__.py
 │
 ├── metrics/
-│ ├── iou.py
-│ ├── dice.py
-│ ├── boundary_f.py
-│ ├── timing.py
-│ └── init.py
+│   ├── iou.py                  
+│   ├── dice.py                 
+│   ├── boundary_f.py           
+│   ├── timing.py               
+│   └── __init__.py
 │
 ├── tuner/
-│ ├── grid_search.py
-│ ├── tuner.py
-│ └── init.py
+│   ├── grid_search.py          
+│   ├── tuner.py                
+│   └── __init__.py
 │
 ├── evaluation/
-│ ├── cross_validation.py
-│ ├── evaluate_one.py
-│ ├── evaluate_dataset.py
-│ └── init.py
+│   ├── cross_validation.py     
+│   ├── evaluate_one.py         
+│   ├── evaluate_dataset.py     
+│   └── __init__.py
 │
 ├── visualization/
-│ ├── overlay.py
-│ ├── plot_results.py
-│ ├── display_gt.py
-│ └── init.py
+│   ├── overlay.py              
+│   ├── plot_results.py         
+│   ├── display_gt.py           
+│   └── __init__.py
 │
-├── compare.py
+├── compare.py                  
 │
 ├── utils/
-│ ├── helpers.py
-│ ├── image_processing.py
-│ └── init.py
+│   ├── helpers.py              
+│   ├── image_processing.py     
+│   └── __init__.py
 │
 └── main.py
-
 
 ---
 
