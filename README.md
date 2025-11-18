@@ -62,48 +62,53 @@ The framework supports parameter tuning, cross-validation, region-based and boun
 ```text
 Project/
 │
-├── bsds_loader.py              
+├── bsds_loader.py               # 读取 BSDS 原图 + 多标注 boundary GT
 │
-├── algorithms/
-│   ├── seg_otsu.py             
-│   ├── seg_kmeans.py           
-│   ├── seg_snake.py            
-│   ├── seg_morph.py            
-│   ├── seg_graph.py            
+├── algorithms/                  # 五个算法 → 统一输出 edge map
+│   ├── seg_otsu.py              # 返回边界
+│   ├── seg_kmeans.py            # 返回边界
+│   ├── seg_snake.py             # 返回边界
+│   ├── seg_morph.py             # 返回边界
+│   ├── seg_graph.py             # 返回边界
 │   └── __init__.py
 │
-├── metrics/
-│   ├── iou.py                  
-│   ├── dice.py                 
-│   ├── boundary_f.py           
-│   ├── timing.py               
+├── edge_processing/             # 新增模块（核心）
+│   ├── mask_to_edge.py          # mask → boundary
+│   ├── label_to_edge.py         # label map → boundary
+│   ├── contour_to_edge.py       # snake contour → boundary
 │   └── __init__.py
 │
-├── tuner/
-│   ├── grid_search.py          
-│   ├── tuner.py                
+├── metrics/                     # 全改成 boundary-based metrics
+│   ├── boundary_f.py            # 主 metric：Boundary F-score
+│   ├── boundary_pr.py           # Precision/Recall 可选
+│   ├── timing.py
 │   └── __init__.py
 │
-├── evaluation/
-│   ├── cross_validation.py     
-│   ├── evaluate_one.py         
-│   ├── evaluate_dataset.py     
+├── tuner/                       # 基于 boundary-F 调参
+│   ├── grid_search.py
+│   ├── tuner.py
+│   └── __init__.py
+│
+├── evaluation/                  # 单图 & 整体评估
+│   ├── evaluate_one.py          # 对一张图输出多算法对比
+│   ├── evaluate_dataset.py      # 对整个 dataset 评估 F-score 平均分
 │   └── __init__.py
 │
 ├── visualization/
-│   ├── overlay.py              
-│   ├── plot_results.py         
-│   ├── display_gt.py           
+│   ├── overlay.py               # overlay 原图 + edge(红色)
+│   ├── plot_results.py          # 拼接 6 图（原图 + GT + 4算法）
+│   ├── display_gt.py            # 展示 BSDS 多标注 GT 边界
 │   └── __init__.py
-│
-├── compare.py                  
 │
 ├── utils/
-│   ├── helpers.py              
-│   ├── image_processing.py     
+│   ├── image_processing.py      # to_gray / flatten / convert_colorspace ...
+│   ├── helpers.py
 │   └── __init__.py
 │
-└── main.py
+├── compare.py                    # main 可调用本文件，快速多方法比较
+│
+└── main.py                       # 统一入口（示例/调参/评估/可视化）
+
 ```
 ---
 
