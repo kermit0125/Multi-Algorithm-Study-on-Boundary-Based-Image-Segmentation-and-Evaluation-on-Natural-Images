@@ -62,52 +62,56 @@ The framework supports parameter tuning, cross-validation, region-based and boun
 ```text
 Project/
 │
-├── bsds_loader.py               # 读取 BSDS 原图 + 多标注 boundary GT
+├── bsds_loader.py                 # 负责加载 BSDS500 原图与人工边界标注
 │
-├── algorithms/                  # 五个算法 → 统一输出 edge map
-│   ├── seg_otsu.py              # 返回边界
-│   ├── seg_kmeans.py            # 返回边界
-│   ├── seg_snake.py             # 返回边界
-│   ├── seg_morph.py             # 返回边界
-│   ├── seg_graph.py             # 返回边界
+├── algorithms/                    # 各类分割算法模块（均输出统一的边界图 edge map）
+│   ├── seg_otsu.py                # Otsu 全局阈值分割
+│   ├── seg_kmeans.py              # 基于颜色聚类的 K-Means 分割
+│   ├── seg_snake.py               # Active Contours（Snake）主动轮廓
+│   ├── seg_morph.py               # 基于形态学和 watershed 的分割
+│   ├── seg_graph.py               # 图论方法（Felzenszwalb/SLIC）
 │   └── __init__.py
 │
-├── edge_processing/             # 新增模块（核心）
-│   ├── mask_to_edge.py          # mask → boundary
-│   ├── label_to_edge.py         # label map → boundary
-│   ├── contour_to_edge.py       # snake contour → boundary
+├── edge_processing/               # 将 mask/label/contour 统一转为边界图
+│   ├── mask_to_edge.py            # 区域 mask → 边界
+│   ├── label_to_edge.py           # 标签图（多区域）→ 边界
+│   ├── contour_to_edge.py         # Snake 轮廓点集 → 边界
 │   └── __init__.py
 │
-├── metrics/                     # 全改成 boundary-based metrics
-│   ├── boundary_f.py            # 主 metric：Boundary F-score
-│   ├── boundary_pr.py           # Precision/Recall 可选
-│   ├── timing.py
+├── metrics/                       # 边界质量评价指标
+│   ├── boundary_f.py              # Boundary F-measure（核心指标）
+│   ├── boundary_precision.py      # 边界精度
+│   ├── boundary_recall.py         # 边界召回
+│   ├── timing.py                  # 运行时间统计
 │   └── __init__.py
 │
-├── tuner/                       # 基于 boundary-F 调参
-│   ├── grid_search.py
-│   ├── tuner.py
+├── tuner/                         # 针对每种算法的独立调参模块
+│   ├── tuner_kmeans.py            # K-Means 参数调优
+│   ├── tuner_snake.py             # Snake 参数调优
+│   ├── tuner_morph.py             # Morph 参数调优
+│   ├── tuner_graph.py             # Graph 参数调优
+│   ├── tuner_otsu.py              # Otsu（通常无参数）
+│   └── grid_search.py             # 通用网格搜索工具
+│
+├── evaluation/                    # 单图与整数据集评估
+│   ├── evaluate_one.py            # 评估单张图的各算法表现
+│   ├── evaluate_dataset.py        # 评估全数据集的平均表现
 │   └── __init__.py
 │
-├── evaluation/                  # 单图 & 整体评估
-│   ├── evaluate_one.py          # 对一张图输出多算法对比
-│   ├── evaluate_dataset.py      # 对整个 dataset 评估 F-score 平均分
+├── visualization/                 # 可视化与叠加绘图
+│   ├── overlay.py                 # 原图 + 边界叠加显示
+│   ├── plot_results.py            # 生成最终多方法对比大图
+│   ├── display_gt.py              # 显示 BSDS500 的人工边界标注
 │   └── __init__.py
 │
-├── visualization/
-│   ├── overlay.py               # overlay 原图 + edge(红色)
-│   ├── plot_results.py          # 拼接 6 图（原图 + GT + 4算法）
-│   ├── display_gt.py            # 展示 BSDS 多标注 GT 边界
+├── utils/                         # 工具函数库
+│   ├── image_processing.py        # 图像处理基本函数
+│   ├── helpers.py                 # 其他辅助工具
 │   └── __init__.py
 │
-├── utils/
-│   ├── image_processing.py      # to_gray / flatten / convert_colorspace ...
-│   ├── helpers.py
-│   └── __init__.py
-│
-├── compare.py                    # main 可调用本文件，快速多方法比较
-│
-└── main.py                       # 统一入口（示例/调参/评估/可视化）
+├── compare.py                     # 快速对比多种算法（调试用）
+└── main.py                        # 项目统一入口脚本
+
 
 ```
 ---
